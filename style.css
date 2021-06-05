@@ -1,0 +1,7 @@
+#display {
+    min-width: 600px;
+    min-height: 200px;
+    background-color: grey;
+    padding: 100px;
+    font-size: 5em;
+}
