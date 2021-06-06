@@ -1,3 +1,7 @@
+Number.prototype.round = function(places) {
+    return +(Math.round(this + "e+" + places)  + "e-" + places);
+};
+
 const display = document.querySelector('#display');
 const add = function (num1, num2){
     return num1 + num2;
@@ -12,13 +16,16 @@ const multiply = function (num1, num2){
 };
 
 const divide = function (num1, num2){
+    if(num2 == 0){
+        return '';
+    }
     return num1 / num2;
 };
 let op1 = '';
 let op2 = '';
 let op = '';
 const operate = function (operation , num1 , num2){
-    if(!num2){return num1};
+    if(!num2 && num2 !== 0){return num1};
     switch(operation){
         case '*':
             op1 = multiply(num1, num2);
@@ -50,6 +57,15 @@ const backspace = function (){
     }
 }
 
+const displayContent = function(item){
+    // if(!isNaN(item) && item !== ''){
+    //     if(item%1 !== 0){
+    //         display.textContent = item.round(3);
+    //     }
+    // }
+
+    display.textContent = item;
+};
 
 const assignOp = function (e, btn){
     switch(btn.value){
@@ -57,7 +73,7 @@ const assignOp = function (e, btn){
             op1 = '';
             op2 = '';
             op = '';
-            display.textContent = '0';
+            displayContent('0');
             break;
         case 'delete':
             backspace();
@@ -66,19 +82,28 @@ const assignOp = function (e, btn){
         case '/':
         case '+':
         case '-':
+            if(op){
+                displayContent(operate(op, parseInt(op1), parseInt(op2)));  
+            }
+            if(!op1 && op1 !== 0){
+                break;
+            }
             op = btn.value;
-            display.textContent = op;
             break;
         case '=':
-            display.textContent = operate(op, parseInt(op1), parseInt(op2));
+            if(!op1){
+                return alert("no numbers entered");
+                
+            }
+            displayContent(operate(op, parseInt(op1), parseInt(op2)));  
             break;
         default:
             if(op === ''){
                 op1 = op1.concat(btn.value);
-                display.textContent = op1;
+                displayContent(op1);
             } else {
                 op2 = op2.concat(btn.value);
-                display.textContent = op2;
+                displayContent(op2);
             }
     };
     console.log(`op1: ${op1}, op2 ${op2}, op: ${op}`);
